@@ -1,0 +1,11 @@
+{
+  "name": "nubankcli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Alejandro Loza",
+  "license": "ISC"
+}
