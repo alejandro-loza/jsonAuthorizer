@@ -7,5 +7,11 @@
     "test": "jest"
   },
   "author": "Alejandro Loza",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "commander": "^9.2.0",
+    "conf": "^10.1.2",
+    "jest": "^27.5.1"
+  }
 }
