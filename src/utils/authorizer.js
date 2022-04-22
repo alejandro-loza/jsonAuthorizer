@@ -14,10 +14,11 @@ const acctions = {
            new AccountDto(account.activeCard, account.availableLimit), [violations.INITIALIZED]
        );
     },
-    transaction: () =>{
+    transaction: (args) =>{
         if(!account){
-            return new ResposeDto({}, [violations.INITIALIZED]);
+            return new ResposeDto({}, [violations.NOT_INITIALIZED]);
         }
+        return new ResposeDto(new AccountDto(account.activeCard, account.availableLimit - args.ammount));
     }
 };
 

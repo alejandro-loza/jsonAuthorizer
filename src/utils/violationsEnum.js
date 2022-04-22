@@ -1,5 +1,5 @@
 export const violations = {
     INITIALIZED: 'account-already-initialized',
-    TYPE2: 'type2',
+    NOT_INITIALIZED: 'account-not-initialized',
     TYPE3: 'type3'
 }
