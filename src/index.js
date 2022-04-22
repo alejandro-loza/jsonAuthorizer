@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 import { Command } from 'commander';
+import { executor } from './commands/authorizeExecutor.js'
 const program = new Command();
 
 program.command('authorize')
@@ -7,7 +8,7 @@ program.command('authorize')
   .argument('<path>', 'the json file path')
   .action((str, options) => {
     console.log(str);
-    console.log(options);
+    executor(str);
   });
 
 program.parse();
