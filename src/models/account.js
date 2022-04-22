@@ -1,4 +1,4 @@
-class Account {
+class AccountRegistry {
 
   constructor(active, availableLimit) {
      this.activeCard = active
@@ -6,11 +6,12 @@ class Account {
   }
 
   static getInstance(active, availableLimit) {
-    if (!Account.instance) {
-        Account.instance = new Account(active, availableLimit);
+    if (!AccountRegistry.instance) {
+        AccountRegistry.instance = new AccountRegistry(active, availableLimit);
     }
-    return Account.instance;
+    return AccountRegistry.instance;
   }
+  
 }
 
-export const getAccount = (active, availableLimit) => Account.getInstance(active, availableLimit);
+export const getAccount = (active, availableLimit) => AccountRegistry.getInstance(active, availableLimit);

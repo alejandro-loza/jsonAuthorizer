@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { Transform } from 'stream';
-import JSONStream from 'JSONStream'; 
+import JSONStream from 'JSONStream';
+import {authorizer} from '../utils/authorizer.js';
 
 export const executor = (filePath) => {
     console.log('Processing '+ filePath);
@@ -13,7 +14,7 @@ export const executor = (filePath) => {
 
         writableObjectMode: true,
         transform( data, encoding, callback){
-            console.log(data);
+            console.log('ahotizer..'+JSON.stringify(authorizer(data)));
        //     this.push(data.toString().toUpperCase())
             callback();
         },
