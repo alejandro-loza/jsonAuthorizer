@@ -1,4 +1,10 @@
-import {getAccount} from '../src/models/account';
+import {getAccount, isAccountInstanced} from '../src/models/account';
+
+test('Should ask for instance', () => {
+ 
+  expect(isAccountInstanced()).toBe(false);
+
+}); 
 
 test('Should create a singleton Account', () => {
   let account = getAccount(true, 666);
@@ -8,5 +14,6 @@ test('Should create a singleton Account', () => {
   let account2 = getAccount(false, 123);
   expect(account2.activeCard).toBe(true);
   expect(account2.availableLimit).toBe(666);
+  expect(isAccountInstanced()).toBe(true);
+});
 
-})

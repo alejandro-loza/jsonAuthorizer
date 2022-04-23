@@ -6,7 +6,7 @@ import {authorizer} from '../utils/authorizer.js';
 export const executor = (filePath) => {
     console.log('Processing '+ filePath);
     const readStream = fs.createReadStream(filePath, { encoding: 'utf8' });
-    const streamEscritura = fs.createWriteStream("./files/destino.txt");
+    const writeStream = fs.createWriteStream("./files/destino.txt");
     const parser = JSONStream.parse('*');
 
 
@@ -15,7 +15,7 @@ export const executor = (filePath) => {
         writableObjectMode: true,
         transform( data, encoding, callback){
             console.log('ahotizer..'+JSON.stringify(authorizer(data)));
-       //     this.push(data.toString().toUpperCase())
+            this.push(JSON.stringify(authorizer(data)) + ','+"\r\n")
             callback();
         },
         final(callback){
@@ -24,6 +24,6 @@ export const executor = (filePath) => {
     
     })
 
-    readStream.pipe(parser).pipe(authorizerProccesor);
+    readStream.pipe(parser).pipe(authorizerProccesor).pipe(writeStream);
 
 };

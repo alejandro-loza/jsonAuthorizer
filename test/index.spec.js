@@ -2,7 +2,7 @@ let path = require('path');
 let exec = require('child_process').exec;
 
 test('Code should be 0', async () => {
-  let result = await  cli(['authorize', 'path/test.json'], '.');
+  let result = await  cli(['authorize', 'files/input.json'], '.');
   expect(result.code).toBe(0);
 })
 
