@@ -1,4 +1,5 @@
 export default class Queue {
+  
   constructor(maxSize) {
     this.elements = [];
     this.maxSize = maxSize;
@@ -17,6 +18,10 @@ export default class Queue {
 
   first = () => {
     this.elements.length[0];
+  }
+
+  last = () =>{
+    this.elements.slice(-1);
   }
   
   get length() {

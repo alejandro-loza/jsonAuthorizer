@@ -17,3 +17,7 @@ test('Should create a singleton Account', () => {
   expect(isAccountInstanced()).toBe(true);
 });
 
+// describe('Should test the transaction queue', () => {
+//    const account = getAccount();
+//    expect(account.transactionQueue).toBe([])
+// });
