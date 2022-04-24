@@ -22,7 +22,7 @@ const acctions = {
         });
 
         if(violations.length === 0){
-            const account = getAccount();
+            const account = getAccount();//todo to store
             return new ResposeDto(new AccountDto(account.activeCard, account.availableLimit));
         }
 
