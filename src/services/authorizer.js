@@ -45,14 +45,11 @@ const alreadyInitializedRespose = (account)=> {
 
 const enqueueNewTransaction = (args) => {
     const account = getAccount();
-    const available = (account.lastTransaction ?
-        account.lastTransaction.available :
-        account.availableLimit) - args.amount;
 
     if (account.isTransactionFull) {
         account.dequeueTransaction();
     }
-    const transaction = new AccountTransaction(args.amount, args.time, available, args.merchant);
+    const transaction = new AccountTransaction(args.amount, args.time, getAvailable(account, args), args.merchant);
     account.enqueueTransaction(transaction);
 
     return new ResposeDto(new AccountDto(account.activeCard, transaction.available));
@@ -81,4 +78,10 @@ const rules = {
 
 export const authorizer = (row) => {
     return acctions[Object.keys(row)[0]](Object.values(row)[0]);
+}
+
+function getAvailable(account, args) {
+    return (account.lastTransaction ?
+        account.lastTransaction.available :
+        account.availableLimit) - args.amount;
 }
