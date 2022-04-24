@@ -2,6 +2,7 @@ import AccountDto from '../models/accountDto.js';
 import ResposeDto from '../models/responseDto.js';
 import {getAccount, isAccountInstanced} from '../models/account.js';
 import {violations} from '../utils/violationsEnum.js';
+import AccountTransaction from '../models/accountTransaction.js';
 
 const acctions = {
     account: (args) =>{
@@ -22,11 +23,18 @@ const acctions = {
         });
 
         if(violations.length === 0){
-            const account = getAccount();//todo to store
-            const available = account.lastTransaction? 
-               account.lastTransaction.available : account.availableLimit;
-            if(account.t) 
-            return new ResposeDto(new AccountDto(account.activeCard, account.availableLimit));
+            const account = getAccount();
+            const available = (account.lastTransaction? 
+               account.lastTransaction.available:
+               account.availableLimit) - args.amount;
+
+            if(account.isTransactionFull){
+                account.dequeueTransaction();
+            } 
+            const transaction = new AccountTransaction(args.amount, args.time, available, args.merchant);
+            account.enqueueTransaction(transaction);
+         
+            return new ResposeDto(new AccountDto(account.activeCard, transaction.available));
         }
 
         return new ResposeDto({}, violations);

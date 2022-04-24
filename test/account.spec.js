@@ -1,9 +1,7 @@
 import {getAccount, isAccountInstanced} from '../src/models/account';
 
 test('Should ask for instance', () => {
- 
   expect(isAccountInstanced()).toBe(false);
-
 }); 
 
 test('Should create a singleton Account', () => {
