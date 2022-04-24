@@ -23,18 +23,7 @@ const acctions = {
         });
 
         if(violations.length === 0){
-            const account = getAccount();
-            const available = (account.lastTransaction? 
-               account.lastTransaction.available:
-               account.availableLimit) - args.amount;
-
-            if(account.isTransactionFull){
-                account.dequeueTransaction();
-            } 
-            const transaction = new AccountTransaction(args.amount, args.time, available, args.merchant);
-            account.enqueueTransaction(transaction);
-         
-            return new ResposeDto(new AccountDto(account.activeCard, transaction.available));
+            return enqueueNewTransaction(args);
         }
 
         return new ResposeDto({}, violations);
@@ -53,6 +42,22 @@ const alreadyInitializedRespose = (account)=> {
         new AccountDto(account.activeCard, account.availableLimit), [violations.INITIALIZED]
     );
 };
+
+const enqueueNewTransaction = (args) => {
+    const account = getAccount();
+    const available = (account.lastTransaction ?
+        account.lastTransaction.available :
+        account.availableLimit) - args.amount;
+
+    if (account.isTransactionFull) {
+        account.dequeueTransaction();
+    }
+    const transaction = new AccountTransaction(args.amount, args.time, available, args.merchant);
+    account.enqueueTransaction(transaction);
+
+    return new ResposeDto(new AccountDto(account.activeCard, transaction.available));
+}
+
 
 const rules = {
     cardNotActive: () =>{
