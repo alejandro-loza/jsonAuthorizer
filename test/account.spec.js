@@ -57,6 +57,7 @@ test('Should dequeue first', () => {
   expect(account.transactionQueue).toEqual(["test", "test2", "test3"]);
 
   account.dequeueTransaction();
+  expect(account.transactionQueue).toEqual(["test2", "test3"]);
   expect(account.transactionQueue.length).toEqual(2);
   expect(account.lastTransaction).toEqual("test3")
   expect(account.firstTransaction).toEqual("test2")

@@ -42,6 +42,7 @@ class Queue {
   constructor(maxSize) {
     this.maxSize = maxSize;
   }
+
   enqueue = (el) => {
       if(this.maxSize && this.length < this.maxSize ){
           this._elements.push(el);
@@ -50,8 +51,9 @@ class Queue {
           this._elements.push(el);
       }
   }
-  dequeue = () => {//todo verify this
-      !this.isEmpty ? this._elements.shift() : 'No executable element';
+
+  dequeue = () => {
+      if(!this.isEmpty) this._elements.shift();
   }
 
   first = () => {
