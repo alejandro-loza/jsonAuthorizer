@@ -21,6 +21,7 @@ test('Should test empty transaction queue', () => {
   expect(isAccountInstanced()).toBe(true);
   const account = getAccount();
   expect(account.transactionQueue.length).toEqual(0);
+  expect(account.isTransactionFull).toEqual(false);
 });
 
 test('Should add transaction to queue and be inmutable', () => {
@@ -47,6 +48,7 @@ test('Should only add 3 transactions on the queue', () => {
   expect(account.transactionQueue).toEqual(["test", "test2", "test3"]);
   expect(account.lastTransaction).toEqual("test3")
   expect(account.firstTransaction).toEqual("test")
+  expect(account.isTransactionFull).toEqual(true)
 
 });
 

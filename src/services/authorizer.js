@@ -23,6 +23,9 @@ const acctions = {
 
         if(violations.length === 0){
             const account = getAccount();//todo to store
+            const available = account.lastTransaction? 
+               account.lastTransaction.available : account.availableLimit;
+            if(account.t) 
             return new ResposeDto(new AccountDto(account.activeCard, account.availableLimit));
         }
 

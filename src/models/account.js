@@ -26,6 +26,10 @@ class AccountRegistry {
     return this._transactionQueue.first();
   }
 
+  get isTransactionFull() {
+    return this._transactionQueue.isFull;
+  }
+
   enqueueTransaction(transaction) {
     return this._transactionQueue.enqueue(transaction);
   }
@@ -73,6 +77,9 @@ class Queue {
   }
   get isEmpty() {
     return this.length === 0;
+  }
+  get isFull() {
+    return this.length >= this.maxSize ;
   }
 };
 
