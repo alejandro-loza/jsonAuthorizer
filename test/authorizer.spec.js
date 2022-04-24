@@ -53,19 +53,19 @@ describe('Should test the account creation cases', () => {
 
 });
 
-// describe('Should test the transaction', () =>{
-//     it('Should create a transaction', ()=>{
+describe('Should test the transaction', () =>{
+    it('Should create a transaction', async ()=>{
 
-//         let myObj = new Object();
-//         myObj['merchant'] = 'Uber Eats';
-//         myObj['amount'] = 25;
-//         myObj['time'] = "2019-02-13T11:00:00.000Z";
+        let myObj = new Object();
+        myObj['merchant'] = 'Uber Eats';
+        myObj['amount'] = 25;
+        myObj['time'] = "2019-02-13T11:00:00.000Z";
 
-//         let row = new Object()
-//         row.transaction = myObj;
-//         const response = authorizer(row);
-//         expect(response.account.activeCard).toBe(true);
-//         expect(response.account.availableLimit).toBe(975);
-//         expect(response.violations.length).toBe(0);
-//     });
-// });
+        let row = new Object()
+        row.transaction = myObj;
+        const response = await authorizer(row);
+        expect(response.account.activeCard).toBe(true);
+        expect(response.account.availableLimit).toBe(975);
+        expect(response.violations.length).toBe(0);
+    });
+});

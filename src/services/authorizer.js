@@ -14,14 +14,12 @@ const acctions = {
             rules.cardNotActive(),
         ]
         ).then(values => {
-            console.log("solved: " + values);
-            return values;
+            console.log("solved: " + values.length);
+            return values.filter(n => n);
         }, reason => {//todo check list
             console.log("reason: " + reason);
             return [reason];
         });
-
-        console.log("violations: " + violations);
 
         if(violations.length === 0){
             const account = getAccount();
@@ -51,7 +49,7 @@ const rules = {
             if(isAccountInstanced() && !getAccount().activeCard){
                 reject(violations.CARD_NOT_ACTIVE);
             }
-            resolve('-');
+            resolve(null);
         });
     },
     accountNotInitialized: () =>{
@@ -59,7 +57,7 @@ const rules = {
             if(!isAccountInstanced()){
                 reject(violations.NOT_INITIALIZED);
             }
-            resolve('-');
+            resolve(null);
         });
     }
     
