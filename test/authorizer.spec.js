@@ -1,6 +1,7 @@
 import {authorizer} from '../src/services/authorizer';
 import {getAccount} from '../src/models/account.js';
 
+jest.setTimeout(50000);
 
 describe('Should test the transaction without account',  () =>{
     it('Should response account not initialized', async ()=>{
@@ -56,6 +57,10 @@ describe('Should test the account creation cases', () => {
 });
 
 describe('Should test the transaction hapy path', () =>{
+    beforeEach(() => {
+        jest.setTimeout(10000);
+      });
+
     it('Should create transactions', async ()=>{
 
         let transaction1 = new Object();
@@ -102,14 +107,18 @@ describe('Should test the transaction hapy path', () =>{
         let row4 = new Object()
         row4.transaction = transaction4;
         const response4 = await authorizer(row4);
+        expect(response4).toBe(true);
+
         expect(response4.account.activeCard).toBe(true);
         expect(response4.account.availableLimit).toBe(900);
         expect(response4.violations.length).toBe(0);
 
         const account = getAccount();
-        expect(account.lastTransaction)
-          .toEqual({"amount": 25, "available": 900, "merchant": "Habbid", "time": "2019-02-13T11:00:20.000Z"})
-        expect(account.firstTransaction)
-          .toEqual({"amount": 25, "available": 950, "merchant": "Burger King", "time": "2019-02-13T11:00:10.000Z"})
+        expect(account.lastTransaction.merchant).toEqual('Habbid');
+        expect(account.lastTransaction.available).toEqual(900);
+
+        expect(account.firstTransaction.merchant).toEqual('Burger King');
+        expect(account.firstTransaction.available).toEqual(950);
+
     });
 });

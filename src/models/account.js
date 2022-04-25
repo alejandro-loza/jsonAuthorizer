@@ -27,7 +27,7 @@ class AccountRegistry {
   }
 
   get isTransactionFull() {
-    return this._transactionQueue.isFull;
+    return this._transactionQueue.isFull();
   }
 
   enqueueTransaction(transaction) {
@@ -78,8 +78,8 @@ class Queue {
   get isEmpty() {
     return this.length === 0;
   }
-  get isFull() {
-    return this.length >= this.maxSize ;
+  isFull() {
+    return this._elements.length >= this.maxSize ;
   }
 };
 
