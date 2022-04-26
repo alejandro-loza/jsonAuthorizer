@@ -6,6 +6,7 @@ jest.mock('fs');
 
 describe('Should test the executor', ()=>{
    it('Executor read, process and writes', async ()=> {
+
       const readStream = {
         pipe: jest.fn().mockReturnThis(),
         on: jest.fn().mockImplementation(function (event, handler) {

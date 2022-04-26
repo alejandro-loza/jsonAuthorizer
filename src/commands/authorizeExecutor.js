@@ -12,13 +12,23 @@ export const executor = (filePath) => {
     const authorizerProccesor = new Transform( {
         writableObjectMode: true,
         async transform( data, encoding, callback){
-            this.push(JSON.stringify(await authorizer(data)) + ','+"\r\n")
+            const row = JSON.stringify(await authorizer(data));
+            console.log(row);
+            this.push(row + ','+"\r\n")
             callback();
         },
         final(callback){
             callback();
         }
     })
+
+    readStream.on('error', function(err) {
+        console.log(JSON.stringify(err));
+    });
+
+    writeStream.on('finish', function () {
+        console.log('Done!');
+    });
 
     readStream.pipe(parser).pipe(authorizerProccesor).pipe(writeStream);
 };
