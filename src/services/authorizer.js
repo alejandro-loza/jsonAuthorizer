@@ -34,7 +34,6 @@ const acctions = {
             return new ResposeDto({}, [reason]);
         });
 
-        console.log(JSON.stringify(response));
         return response; 
     }
 };
@@ -105,14 +104,9 @@ const rules = {
     },
     doubledTransaction: (args)=>{
         return new Promise((resolve) => {
-            const queue = getAccount()?.transactionQueue;
-            console.log('args: '+JSON.stringify(args));
-            console.log("queue: " + JSON.stringify(queue));
-
-            const foundTransactions = queue.filter((t) => {
+            const foundTransactions = getAccount()?.transactionQueue.filter((t) => {
                return t.merchant == args.merchant && t.amount == args.amount;
             });
-            console.log("foundTransactions" + JSON.stringify(foundTransactions));
             foundTransactions?.length !== 0? resolve(violations.DOUBLED): resolve('');
         }); 
     }
