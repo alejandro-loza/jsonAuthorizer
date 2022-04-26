@@ -6,6 +6,9 @@
   "scripts": {
     "test": "jest"
   },
+  "bin": {
+    "authorizer": "src/index.js"
+  },
   "type": "module",
   "license": "ISC",
   "dependencies": {
