@@ -22,13 +22,9 @@ export const executor = (filePath) => {
         }
     })
 
-    readStream.on('error', function(err) {
-        console.log(JSON.stringify(err));
-    });
+    readStream.on('error', (err) => console.log(JSON.stringify(err)));
 
-    writeStream.on('finish', function () {
-        console.log('Done!');
-    });
+    writeStream.on('finish', ()=>  console.log('Done!'));
 
     readStream.pipe(parser).pipe(authorizerProccesor).pipe(writeStream);
 };
