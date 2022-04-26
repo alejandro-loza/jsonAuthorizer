@@ -30,6 +30,10 @@ class AccountRegistry {
     return this._transactionQueue.isFull();
   }
 
+  get isTransactionEmpty() {
+    return this._transactionQueue.isEmpty();
+  }
+
   enqueueTransaction(transaction) {
     return this._transactionQueue.enqueue(transaction);
   }
@@ -57,7 +61,7 @@ class Queue {
   }
 
   dequeue = () => {
-      if(!this.isEmpty) this._elements.shift();
+      if(!this.isEmpty()) this._elements.shift();
   }
 
   first = () => {
@@ -75,8 +79,8 @@ class Queue {
   get length() {
     return this._elements.length;
   }
-  get isEmpty() {
-    return this.length === 0;
+  isEmpty() {
+    return  this._elements.length === 0;
   }
   isFull() {
     return this._elements.length >= this.maxSize ;

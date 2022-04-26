@@ -3,5 +3,6 @@ export const violations = {
     NOT_INITIALIZED: 'account-not-initialized',
     CARD_NOT_ACTIVE: 'card-not-active',
     INSUFFICIENT_LIMIT: 'insufficient-limit',
-    HIGH_FREQUENCY: 'high-frequency-small-interval'
+    HIGH_FREQUENCY: 'high-frequency-small-interval',
+    DOUBLED: 'doubled-transaction'
 }

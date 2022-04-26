@@ -4,6 +4,9 @@ import {getAccount, isAccountInstanced} from '../models/account.js';
 import {violations} from '../utils/violationsEnum.js';
 import AccountTransaction from '../models/accountTransaction.js';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+
+dayjs.extend(utc);
 
 const acctions = {
     account: (args) =>{
@@ -11,22 +14,28 @@ const acctions = {
     },
     transaction: async (args) =>{
 
-        const violations = await Promise.all([
+        const response = await Promise.all([
             rules.accountNotInitialized(),
             rules.cardNotActive(),
-            rules.highFrequencySmallInterval(args)
+            rules.highFrequencySmallInterval(args),
+            rules.doubledTransaction(args),
+            rules.insufficientLimit(args)
         ]
         ).then(values => {
-            return values.filter(n => n);
+            const account = getAccount();
+            const resolved = values.filter(e => e === 0 || e);
+            if(resolved.length === 0){
+                const transaction = enqueueNewTransaction(args, account);
+                return new ResposeDto(
+                    new AccountDto(account.activeCard, transaction.available));
+            }
+            return new ResposeDto(new AccountDto(account.activeCard, getAvailable(account)),resolved);
         }, reason => {
-            return [reason];
+            return new ResposeDto({}, [reason]);
         });
 
-        if(violations.length === 0){
-            return enqueueNewTransaction(args);
-        }
-
-        return new ResposeDto({}, violations);
+        console.log(JSON.stringify(response));
+        return response; 
     }
 };
 
@@ -43,17 +52,16 @@ const alreadyInitializedRespose = (account)=> {
     );
 };
 
-const enqueueNewTransaction = (args) => {
-    const account = getAccount();
+const enqueueNewTransaction = (args, account) => {
 
     if (account.isTransactionFull) {
         account.dequeueTransaction();
     }
-    const transaction = new AccountTransaction(args.amount, args.time,
-         getAvailable(account) - args.amount, args.merchant);
-    account.enqueueTransaction(transaction);
 
-    return new ResposeDto(new AccountDto(account.activeCard, transaction.available));
+    const transaction = new AccountTransaction(
+        args.amount, args.time, getAvailable(account) - args.amount, args.merchant);
+    account.enqueueTransaction(transaction);
+    return transaction;
 }
 
 const getAvailable = (account) =>{
@@ -67,7 +75,7 @@ const rules = {
             if(isAccountInstanced() && !getAccount().activeCard){
                 reject(violations.CARD_NOT_ACTIVE);
             }
-            resolve(null);
+            resolve('');
         });
     },
     accountNotInitialized: () =>{
@@ -75,33 +83,38 @@ const rules = {
             if(!isAccountInstanced()){
                 reject(violations.NOT_INITIALIZED);
             }
-            resolve(null);
+            resolve('');
         });
     },
-    insufficientLimit: (args ) =>{
+    insufficientLimit: (args) =>{
         return new Promise((resolve) => {
-            if(isAccountInstanced() &&  args.amount > getAvailable(getAccount())){
-                resolve(violations.INSUFFICIENT_LIMIT);
-            }
+            (isAccountInstanced() &&  args.amount >= getAvailable(getAccount()))? 
+                resolve(violations.INSUFFICIENT_LIMIT): resolve('');
         });
     },
     highFrequencySmallInterval: (args)=>{
-       
         return new Promise((resolve) => {
             if(isAccountInstanced() &&  args.time){
                 const account = getAccount();
-                if(account.isTransactionFull ){
-                    console.log(account.firstTransaction.time);
-                    
-                    var future = dayjs(account.firstTransaction.time).add(2, 'minutes').toDate();
-
-                    console.log('Higggg..' + future);
-
-                }
-
-                resolve();
+                const transactionDate = dayjs(args.time);
+                const future = dayjs(account.firstTransaction?.time).add(2, 'minutes');
+                (account.isTransactionFull && transactionDate.isBefore(future))? 
+                  resolve(violations.HIGH_FREQUENCY): resolve('');
             }
         });
+    },
+    doubledTransaction: (args)=>{
+        return new Promise((resolve) => {
+            const queue = getAccount()?.transactionQueue;
+            console.log('args: '+JSON.stringify(args));
+            console.log("queue: " + JSON.stringify(queue));
+
+            const foundTransactions = queue.filter((t) => {
+               return t.merchant == args.merchant && t.amount == args.amount;
+            });
+            console.log("foundTransactions" + JSON.stringify(foundTransactions));
+            foundTransactions?.length !== 0? resolve(violations.DOUBLED): resolve('');
+        }); 
     }
     
 };
