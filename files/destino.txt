@@ -1,4 +1,0 @@
-{"account":{"activeCard":true,"availableLimit":100},"violations":["account-already-initialized"]},
-{"account":{"activeCard":true,"availableLimit":100},"violations":["account-already-initialized"]},
-{"account":{"activeCard":true,"availableLimit":100},"violations":["account-already-initialized"]},
-{"account":{"activeCard":true,"availableLimit":100},"violations":["account-already-initialized"]},

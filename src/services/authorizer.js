@@ -116,4 +116,3 @@ const rules = {
 export const authorizer = (row) => {
     return acctions[Object.keys(row)[0]](Object.values(row)[0]);
 }
-

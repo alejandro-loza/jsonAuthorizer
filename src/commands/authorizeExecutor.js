@@ -6,13 +6,13 @@ import {authorizer} from '../services/authorizer.js';
 export const executor = (filePath) => {
     console.log('Processing...'+ filePath);
     const readStream = fs.createReadStream(filePath, { encoding: 'utf8' });
-    const writeStream = fs.createWriteStream("./files/destino.txt");
+    const writeStream = fs.createWriteStream("./files/output.txt");
     const parser = JSONStream.parse('*');
 
     const authorizerProccesor = new Transform( {
         writableObjectMode: true,
         async transform( data, encoding, callback){
-            this.push(JSON.stringify(authorizer(await authorizer(data))) + ','+"\r\n")
+            this.push(JSON.stringify(await authorizer(data)) + ','+"\r\n")
             callback();
         },
         final(callback){
